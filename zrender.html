@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .gridbg {
+            background-image: repeating-linear-gradient(0deg, rgba(9, 23, 43, 1), rgba(9, 23, 43, 1) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(-90deg, rgba(9, 23, 43, 1), rgba(9, 23, 43, 1) 1px, transparent 1px, transparent 20px);
+            background-size: 10px 10px;
+            background-position: 1px 1px;
+            background-color: rgb(14, 28, 48);
+        }
+    </style>
+</head>
+<body class="gridbg">
+    <div id="main" style="float: left;width:400px;height:400px;margin: 0 auto;"></div>
+    <div id="main1" style="float: left;width:400px;height:400px;margin: 0 auto;"></div>
+    <script src="./zrender.js"></script>
+    <script src="./pie.js"></script>
+    <script>
+        var texts = ['取消', '分析', '节点', '操作', '布局'] //内圈pie对应的text文本
+        var images = ['img/cancle.png', 'img/analyze.png', 'img/route.png', 'img/operate.png', 'img/layout.png', 'img/focuse.png']       
+        var outPies = [0, 1, 3, 4, 1]; //外圈outPie的个数
+        var outTexts = [[], ['挖掘分析', '关系分析', '六度分析'], ['编辑', '删除', '隐藏'], ['照片', '档案', '添加关系', '镜像'], ['力导力道', '矩阵', '层级']] //外圈outPie对应的text文本
+        var centerPoint = {cx: parseInt(document.getElementById('main').style.width) / 2, cy: parseInt(document.getElementById('main').style.height) / 2} // canvas中点坐标
+        
+        var a = {
+            text: "123",
+            func: function() {
+                console.log(12313)
+            }
+        }
+
+
+        var mainPie = new Pie(document.getElementById('main'),{
+            number: 4,                                                  // 内圈pie的数量
+            texts: texts,                                               // 内圈pie对应的text文本
+            images: images,                                             // 内圈pie对应的图片
+            imgSize: {imgWidth: 20, imgHeight: 20, radius: 66},         // 图片宽高与距离中心距离
+            outPies: outPies,                                           // 外圈outPie的个数
+            outTexts: outTexts,                                         // 外圈outPie对应的text文本          
+            centerPoint: centerPoint,                                   // canvas中点坐标
+            radius: {innerr: 33, innerR: 99, outerr: 104, outerR: 150}  // 内圈的内外半径和外圈的内外半径
+        })
+
+       var pieGroup = mainPie.getPieGroup();
+       var imgGroup = mainPie.getImgGroup();
+       var outPieGroupObj = mainPie.getOutPieGroupObj();
+
+
+        pieGroup.children()[0].on('click', function() {
+            console.log(000)
+        })
+         imgGroup.children()[0].on('click', function() {
+            console.log(111)
+        })
+        outPieGroupObj[1].children()[0].on('click', function() {
+            console.log('1-0')
+        })
+        outPieGroupObj[1].children()[1].on('click', function() {
+            console.log('1-1')
+        })
+        outPieGroupObj[1].children()[2].on('click', function() {
+            console.log('1-2')
+        })
+
+
+        new Pie(document.getElementById('main1'),{
+            number: 3,                                                   // 内圈pie的数量    
+            texts: ['取消', '删除关系', '修改关系'],                       // 内圈pie对应的text文本
+            images: ['img/cancle.png', 'img/delete.png', 'img/edit.png'],// 内圈pie对应的图片
+            imgSize: {imgWidth: 20, imgHeight: 20, radius: 73},          // 图片宽高与距离中心距离        
+            centerPoint: {cx: 200, cy: 200},                             // canvas中点坐标
+            radius: {innerr: 45, innerR: 99}                             // 内圈的内外半径和外圈的内外半径
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .parentUl {
+            width: 120px;
+            font-size: 14px;
+            font-family: 'Microsoft YaHei';
+            color: #fff;
+        }
+
+        .parentUl>li {
+            background-color: #1865ad;
+        }
+
+        .parentUl>li:hover {
+            background-color: #0b3c7f;
+        }
+
+        .parentUl>li:hover>.innerDiv {
+            border-top: 1px solid #24518c;
+        }
+
+        .innerDiv {
+            position: relative;
+            height: 32px;
+            line-height: 32px;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding-left: 3px;
+            border-top: 1px solid #3175b2;
+        }
+
+        .caret {
+            position: absolute;
+            top: 10px;
+            right: -8px;
+            width: 0;
+            height: 0;
+            border: 6px solid;
+            border-color: transparent transparent transparent #fff;
+        }
+
+        .childrenUl {
+            display: none;
+            position: absolute;
+            left: 110px;
+            top: -1px;
+            width: 100px;
+            border-left: 2px solid transparent;
+        }
+
+        .childrenUl>li {
+            background-color: #082956;
+        }
+
+        .childrenUl>li:hover {
+            background-color: #051f42;
+        }
+
+        .childrenUl>li>.innerDiv {
+            border-top: 1px solid #213e66;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="menu"></div>
+    <script src="./jquery.js"></script>
+    <script>
+        var arr1 = ['修改关系', '删除关系', '取消', '操作', '布局', '分析'];
+        var arr2 = [
+            ['1-0', '1-1', '1-2'],
+            ['2-0', '2-1', '2-2']
+        ];
+
+        function Xcz_setMenu(el, arr1, arr2) {
+            var str = '<ul class="parentUl">'
+            for (var i = 0; i < arr1.length; i++) {
+                var caret = '';
+                var subStr = '';
+                if (arr2[i] && arr2[i].length > 0) {
+                    caret += '<span class="caret"></span>';
+                    subStr += '<ul class="childrenUl">';
+                    for (var j = 0; j < arr2[i].length; j++) {
+                        subStr += '<li>' +
+                            '<div class="innerDiv">' +
+                            '<span>' + arr2[i][j] + '</span>' +
+                            '</div>' +
+                            '</li>'
+                    }
+                    subStr += '</ul>'
+                }
+
+                str += '<li>' +
+                    '<div class="innerDiv">' +
+                    '<span>' + arr1[i] + '</span>' +
+                    caret +
+                    subStr +
+                    '</div>' +
+                    '</li>'
+            }
+
+            str += '</ul>';
+            el.append(str);
+            $('.parentUl li').hover(function () {
+                $($(this).find('.childrenUl')[0]).show()
+            }, function () {
+                $($(this).find('.childrenUl')[0]).hide()
+            })
+        }
+
+        new Xcz_setMenu($('#menu'), arr1, arr2)
+    </script>
+</body>
+
+</html>
