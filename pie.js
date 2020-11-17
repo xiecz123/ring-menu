@@ -74,15 +74,7 @@
                 number: 1 // pie的总共数量
             },
             buildPath: function (ctx, shape) {
-                // 原点偏移——为了让pie之间出现空隙
-                var ox = getX((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
-                var oy = getY((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
-                ctx.arc(shape.cx + ox, shape.cy + oy, shape.r, shape.i * 2 * Math.PI / shape.number, (shape.i + 1) * 2 * Math.PI / shape.number);
-                var Rx = getX((shape.i + 1) * 2 * Math.PI / shape.number, shape.R);
-                var Ry = getY((shape.i + 1) * 2 * Math.PI / shape.number, shape.R);
-                ctx.lineTo(shape.cx + Rx + ox, shape.cy + Ry + oy);
-                ctx.arc(shape.cx + ox, shape.cy + oy, shape.R, (shape.i + 1) * 2 * Math.PI / shape.number, shape.i * 2 * Math.PI / shape.number, true);
-                ctx.closePath();
+                drawSector(ctx, shape, 'deviation', 0)
             }
         });
 
@@ -156,26 +148,8 @@
             },
             buildPath: function (ctx, shape) {
                 // 绘制外圈扇形
-                if (shape.isOne) {
-                    var rad1 = shape.j * Math.PI / shape.number + shape.i * 2 * Math.PI / shape.number;
-                    var rad2 = (shape.j + 2) * Math.PI / shape.number - Math.PI / 180 + shape.i * 2 * Math.PI / shape.number;   // 减少一些角度来产生outPie之间的空隙     
-                    ctx.arc(shape.cx, shape.cy, shape.r, rad1, rad2);
-                    var x = Math.cos(rad2) * shape.R;
-                    var y = Math.sin(rad2) * shape.R;
-                    ctx.lineTo(shape.cx + x, shape.cy + y);
-                    ctx.arc(shape.cx, shape.cy, shape.R, rad2, rad1, true);
-                    ctx.closePath();
-                    return;
-                }
-
-                var rad1 = shape.j * Math.PI / shape.number + shape.i * 2 * Math.PI / shape.number;
-                var rad2 = (shape.j + 1) * Math.PI / shape.number - Math.PI / 180 + shape.i * 2 * Math.PI / shape.number;   // 减少一些角度来产生outPie之间的空隙     
-                ctx.arc(shape.cx, shape.cy, shape.r, rad1, rad2);
-                var x = Math.cos(rad2) * shape.R;
-                var y = Math.sin(rad2) * shape.R;
-                ctx.lineTo(shape.cx + x, shape.cy + y);
-                ctx.arc(shape.cx, shape.cy, shape.R, rad2, rad1, true);
-                ctx.closePath();
+                var baseRad = shape.innerPieIndex * 2 * Math.PI / ( shape.number / 2);              
+                drawSector(ctx, shape, 'angle', baseRad)
             }
         })
 
@@ -188,9 +162,9 @@
                         cy: _this.params.centerPoint.cy,
                         r: _this.params.radius.outerr,
                         R: _this.params.radius.outerR,
-                        i: i,
-                        j: j,
-                        number: _this.params.number,
+                        i: j,
+                        innerPieIndex: i,
+                        number: 2 * _this.params.number, // 设置外圈扇形是几分圆
                         isOne: isOne
                     },
                     style: {
@@ -204,8 +178,7 @@
 
                 outPie.on('mouseover', function () {
                     this.setStyle('fill', '#0b3c7f');
-                })
-                outPie.on('mouseout', function () {
+                }).on('mouseout', function () {
                     this.setStyle('fill', '#082956');
                 })
 
@@ -243,6 +216,34 @@
 
         _this.imgGroup.add(img);
         zr.add(img);
+    }
+
+    function drawSector(ctx, shape, type, baseRad) {
+        var ox = 0;
+        var oy = 0;
+
+        var startRad = baseRad + shape.i * 2 * Math.PI / shape.number;
+        var endRad = 0;
+        if (shape.isOne) {
+            endRad = baseRad + (shape.i + 2) * 2 * Math.PI / shape.number;
+        } else {
+            endRad = baseRad + (shape.i + 1) * 2 * Math.PI / shape.number;
+        }
+
+        if (type === 'angle') {
+            endRad = endRad - Math.PI / 180
+        } else if (type === 'deviation') {
+            ox = getX((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+            oy = getY((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+        }
+
+        var Rx = getX(endRad, shape.R);
+        var Ry = getY(endRad, shape.R);
+
+        ctx.arc(shape.cx + ox, shape.cy + oy, shape.r, startRad, endRad);
+        ctx.lineTo(shape.cx + Rx + ox, shape.cy + Ry + oy);
+        ctx.arc(shape.cx + ox, shape.cy + oy, shape.R, endRad, startRad, true);
+        ctx.closePath();
     }
 
     function getX(rad, r) {
