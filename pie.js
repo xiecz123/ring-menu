@@ -110,23 +110,11 @@
 
                 innerPie.on('mouseover', function () {
                     this.setStyle('fill', '#0b3c7f');
-                    this.setStyle('textFill', '#000000');
-                    
-                    zr.remove(_this.imgGroup._children[i])
-                    //_this.imgGroup.remove(_this.imgGroup._children[i])
-                    console.log('remove' + i)
-                    if (_this.params.images) {
-                        _this.params.images[i] = "img/route.png"
-                        _this.drawImage(zr, i, imgx, imgy)
-                        console.log(_this.imgGroup)
-                    }
-                    //console.log(_this.imgGroup._children[i])
-                    //_this.getImgGroup()._children[i].setStyle('textFill', '#000000');
+
                     // 当最后一次选择的pie下标不等于当前选择pie的下标时，执行以下方法
                     if (_this.lastSelect !== i) {
                         _this.pieGroup.childOfName('pie' + _this.lastSelect).setStyle('fill', '#1865ad');
-                        _this.getImgGroup()._children[_this.lastSelect].setStyle('textFill', '#ffffff');
-                        if (_this.params.outPies) {   
+                        if (_this.params.outPies) {
                             _this.outPieGroupObj[_this.lastSelect].hide();
                         }                     
                         _this.lastSelect = i;
@@ -143,7 +131,6 @@
 
                 if (_this.params.images) {
                     _this.drawImage(zr, i, imgx, imgy)
-                    console.log('first drawImage')
                 }
 
             })(i)
@@ -195,46 +182,25 @@
         for (var j = 0; j < _this.params.outPies[i]; j++) {
             (function (j) {
                 var isOne = (_this.params.outPies[i] == 1) ? true : false; //是否只有一个外圈
-                if (isOne) {
-                    outPie = new OutPie({
-                        shape: {
-                            cx: _this.params.centerPoint.cx,
-                            cy: _this.params.centerPoint.cy,
-                            r: _this.params.radius.outerr,
-                            R: _this.params.radius.outerR,
-                            i: i,
-                            j: j,
-                            number: _this.params.number,
-                            isOne: isOne
-                        },
-                        style: {
-                            fill: '#082956',
-                            text: _this.params.outTexts[i][j],
-                            textFill: "#ffffff",
-                            textOffset: [-10,10]
-                        },
-                        name: 'outPie' + j
-                    })
-                }  else {
-                    outPie = new OutPie({
-                        shape: {
-                            cx: _this.params.centerPoint.cx,
-                            cy: _this.params.centerPoint.cy,
-                            r: _this.params.radius.outerr,
-                            R: _this.params.radius.outerR,
-                            i: i,
-                            j: j,
-                            number: _this.params.number,
-                            isOne: isOne
-                        },
-                        style: {
-                            fill: '#082956',
-                            text: _this.params.outTexts[i][j],
-                            textFill: "#ffffff"
-                        },
-                        name: 'outPie' + j
-                    })
-                }
+                outPie = new OutPie({
+                    shape: {
+                        cx: _this.params.centerPoint.cx,
+                        cy: _this.params.centerPoint.cy,
+                        r: _this.params.radius.outerr,
+                        R: _this.params.radius.outerR,
+                        i: i,
+                        j: j,
+                        number: _this.params.number,
+                        isOne: isOne
+                    },
+                    style: {
+                        fill: '#082956',
+                        text: _this.params.outTexts[i][j],
+                        textFill: "#ffffff",
+                        textOffset: isOne ? [-10,10] : ""
+                    },
+                    name: 'outPie' + j
+                })
 
                 outPie.on('mouseover', function () {
                     this.setStyle('fill', '#0b3c7f');
