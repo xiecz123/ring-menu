@@ -43,6 +43,42 @@
         if (this.params.outPies) {
             this.outPieGroupObj = {}
         }
+
+        var InnerPie = zrender.Path.extend({
+            type: 'innerPie',
+            shape: {
+                cx: 0, // 画布的原点坐标x
+                cy: 0, // 画布的原点坐标y
+                r: 0, // pie的内半径   
+                R: 0, // pie的外半径
+                i: 0, // 是第几个扇形
+                number: 1 // 一个完整的圆环将分成几个扇形
+            },
+            buildPath: function (ctx, shape) {
+                drawSector(ctx, shape, 'deviation', 0)
+            }
+        });
+
+        var OutPie = zrender.Path.extend({
+            type: 'outPie',
+            shape: {
+                cx: 0,
+                cy: 0,
+                r: 0,
+                R: 0,
+                i: 0,
+                j: 0,
+                number: 1
+            },
+            buildPath: function (ctx, shape) {
+                // 绘制外圈扇形
+                var baseRad = shape.innerPieIndex * 2 * Math.PI / ( shape.number / 2);              
+                drawSector(ctx, shape, 'angle', baseRad)
+            }
+        })
+
+        this.innerPie = InnerPie
+        this.outPie = OutPie
         
         this.drawInnerPie(zr, this.params.number)
     }
@@ -61,23 +97,7 @@
 
     Pie.prototype.drawInnerPie = function (zr, number) {
         var _this = this;
-
-        // 自定义图形pie
-        var InnerPie = zrender.Path.extend({
-            type: 'innerPie',
-            shape: {
-                cx: 0, // 画布的原点坐标x
-                cy: 0, // 画布的原点坐标y
-                r: 0, // pie的内半径   
-                R: 0, // pie的外半径
-                i: 0, // 是第几个pie
-                number: 1 // pie的总共数量
-            },
-            buildPath: function (ctx, shape) {
-                drawSector(ctx, shape, 'deviation', 0)
-            }
-        });
-
+        var InnerPie = this.innerPie
         for (var i = 0; i < number; i++) {
             (function (i) {
                 var innerPie = new InnerPie({
@@ -135,24 +155,8 @@
 
         var outPieGroup = new zrender.Group();
 
-        var OutPie = zrender.Path.extend({
-            type: 'outPie',
-            shape: {
-                cx: 0,
-                cy: 0,
-                r: 0,
-                R: 0,
-                i: 0,
-                j: 0,
-                number: 1
-            },
-            buildPath: function (ctx, shape) {
-                // 绘制外圈扇形
-                var baseRad = shape.innerPieIndex * 2 * Math.PI / ( shape.number / 2);              
-                drawSector(ctx, shape, 'angle', baseRad)
-            }
-        })
 
+        var OutPie = this.outPie
         for (var j = 0; j < _this.params.outPies[i]; j++) {
             (function (j) {
                 var isOne = (_this.params.outPies[i] == 1) ? true : false; //是否只有一个外圈

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="canvas" width="500" height="500"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = "rgb(200,0,0)";
+    ctx.strokeStyle = "rgb(200,0,0)";
+
+    function getX(rad, r) {
+      return Math.cos(rad) * r;
+    }
+
+    function getY(rad, r) {
+      return Math.sin(rad) * r;
+    }
+
+    function buildPath(ctx, shape) {
+      ctx.beginPath();
+      // 原点偏移——为了让pie之间出现空隙
+      var ox = getX((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+      var oy = getY((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+      ctx.arc(shape.cx + ox, shape.cy + oy, shape.r, shape.i * 2 * Math.PI / shape.number, (shape.i + 1) * 2 *
+        Math.PI / shape.number);
+      var Rx = getX((shape.i + 1) * 2 * Math.PI / shape.number, shape.R);
+      var Ry = getY((shape.i + 1) * 2 * Math.PI / shape.number, shape.R);
+      ctx.lineTo(shape.cx + Rx + ox, shape.cy + Ry + oy);
+      ctx.arc(shape.cx + ox, shape.cy + oy, shape.R, (shape.i + 1) * 2 * Math.PI / shape.number, shape.i * 2 *
+        Math.PI / shape.number, true);
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    function buildPath0(ctx, shape) {
+      ctx.save();
+      ctx.beginPath();
+      // 原点偏移——为了让pie之间出现空隙
+      var ox = getX((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+      var oy = getY((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+      ctx.translate(ox, oy)
+      ctx.arc(shape.cx, shape.cy, shape.r, shape.i * 2 * Math.PI / shape.number, (shape.i + 1) * 2 *
+        Math.PI / shape.number);
+      var Rx = getX((shape.i + 1) * 2 * Math.PI / shape.number, shape.R);
+      var Ry = getY((shape.i + 1) * 2 * Math.PI / shape.number, shape.R);
+      ctx.lineTo(shape.cx + Rx, shape.cy + Ry);
+      ctx.arc(shape.cx, shape.cy, shape.R, (shape.i + 1) * 2 * Math.PI / shape.number, shape.i * 2 *
+        Math.PI / shape.number, true);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function buildPath2(ctx, shape) {
+      ctx.beginPath();
+      // 绘制外圈扇形
+      var rad1 = shape.j * Math.PI / shape.number + shape.i * 2 * Math.PI / shape.number;
+      var rad2 = 0
+      if (shape.isOne) {
+        rad2 = (shape.j + 2) * Math.PI / shape.number - Math.PI / 180 + shape.i * 2 * Math.PI / shape
+          .number; //减少一些角度来产生outPie之间的空隙
+      } else {
+        rad2 = (shape.j + 1) * Math.PI / shape.number - Math.PI / 180 + shape.i * 2 * Math.PI / shape
+          .number; //减少一些角度来产生outPie之间的空隙
+      }
+      ctx.arc(shape.cx, shape.cy, shape.r, rad1, rad2);
+      var x = getX(rad2, shape.R);
+      var y = getY(rad2, shape.R);
+      ctx.lineTo(shape.cx + x, shape.cy + y);
+      ctx.arc(shape.cx, shape.cy, shape.R, rad2, rad1, true);
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+
+    for (i = 0; i < 4; i++) {
+      buildPath(ctx, {
+        cx: 100,
+        cy: 100,
+        r: 10,
+        R: 30,
+        i: i,
+        number: 4
+      })
+    }
+    for (i = 0; i < 4; i++) {
+      buildPath0(ctx, {
+        cx: 200,
+        cy: 100,
+        r: 10,
+        R: 30,
+        i: i,
+        number: 4
+      })
+    }
+
+    // for (i = 0; i < 4; i++) {
+    //   buildPath2(ctx, {
+    //     cx: 200,
+    //     cy: 200,
+    //     r: 50,
+    //     R: 80,
+    //     i: i,
+    //     j: 3,
+    //     number: 4,
+    //     isOne: true
+    //   })
+    // }
+  </script>
+</body>
+
+</html>
