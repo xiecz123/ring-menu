@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "使用zrender.js 封装的环形菜单组件",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server",
-    "build": "cross-env NODE_ENV=production webpack"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js --open",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
