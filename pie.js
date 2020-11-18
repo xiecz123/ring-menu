@@ -237,8 +237,13 @@
         if (type === 'angle') {
             endRad = endRad - Math.PI / 180
         } else if (type === 'deviation') {
-            ox = getX((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
-            oy = getY((2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+            if (shape.isOne) {
+                ox = getX( baseRad + (2 * shape.i + 2) * Math.PI / shape.number, shape.number / 2);
+                oy = getY( baseRad +(2 * shape.i + 2) * Math.PI / shape.number, shape.number / 2);
+            } else {
+                ox = getX( baseRad +(2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+                oy = getY( baseRad +(2 * shape.i + 1) * Math.PI / shape.number, shape.number / 2);
+            }
         }
 
         var Rx = getX(endRad, shape.R);
