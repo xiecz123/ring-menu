@@ -83,18 +83,6 @@
         this.drawInnerPie(zr, this.params.number)
     }
 
-    Pie.prototype.getPieGroup = function () {
-        return this.pieGroup;
-    }
-
-    Pie.prototype.getImgGroup = function () {
-        return this.imgGroup;
-    }
-
-    Pie.prototype.getOutPieGroupObj = function () {
-        return this.outPieGroupObj;
-    }
-
     Pie.prototype.drawInnerPie = function (zr, number) {
         var _this = this;
         var InnerPie = this.innerPie
