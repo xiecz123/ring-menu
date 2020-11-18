@@ -37,10 +37,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
+    // contentBase: './dist',
     port: '3000',
     stats: 'errors-only',
-    hot: true,
-    proxy: 'http://localhost:4000'
+    hot: true
   },
   devtool: 'cheap-module-source-map',
   module: {
@@ -55,21 +55,8 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: function () {
-                return [
-                  require('autoprefixer')({
-                    overrideBrowserslist: [
-                      '>0.25%',
-                      'not dead'
-                    ]
-                  })
-                ]
-              }
-            }
-          }, 'less-loader'
+          'postcss-loader',
+          'less-loader'
         ],
         exclude: /node_modules/
       },
