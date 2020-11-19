@@ -7,8 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 
-function resolve (src) {
-  return path.resolve(__dirname, src)
+function resolve (dir) {
+  return path.resolve(__dirname, dir)
 }
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
   mode: isDev ? 'development' : 'production',
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
+      '@': resolve('src')
     }
   },
   plugins: [
