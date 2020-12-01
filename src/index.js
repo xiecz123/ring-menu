@@ -1,5 +1,5 @@
 import Pie from './Pie'
-import './assets/styles/index.css'
+import './assets/styles'
 import cancelImg from '@/assets/img/cancel.png'
 import analyzeImg from '@/assets/img/analyze.png'
 import routeImg from '@/assets/img/route.png'
