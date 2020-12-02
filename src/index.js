@@ -6,7 +6,6 @@ import routeImg from '@/assets/img/route.png'
 import operateImg from '@/assets/img/operate.png'
 // import deleteImg from '@/assets/img/delete.png'
 // import editImg from '@/assets/img/edit.png'
-// new branch commit
 
 function AddElement () {
   const app = document.getElementById('app')

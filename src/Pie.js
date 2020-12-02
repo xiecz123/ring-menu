@@ -1,49 +1,5 @@
 import zrender from 'zrender'
-import {
-  getX,
-  getY,
-  extend
-} from './util'
-
-function drawSector (ctx, shape, type, baseRad) {
-  const {
-    number
-  } = shape
-  const {
-    PI
-  } = Math
-  let ox = 0
-  let oy = 0
-
-  const startRad = baseRad + shape.i * 2 * PI / number
-  let endRad = 0
-  if (shape.isOne) {
-    endRad = baseRad + (shape.i + 2) * 2 * PI / number
-  } else {
-    endRad = baseRad + (shape.i + 1) * 2 * PI / number
-  }
-
-  if (type === 'angle') {
-    const tinyRad = PI / 180
-    endRad -= tinyRad
-  } else if (type === 'deviation') {
-    if (shape.isOne) {
-      ox = getX(baseRad + (2 * shape.i + 2) * PI / number, number / 2)
-      oy = getY(baseRad + (2 * shape.i + 2) * PI / number, number / 2)
-    } else {
-      ox = getX(baseRad + (2 * shape.i + 1) * PI / number, number / 2)
-      oy = getY(baseRad + (2 * shape.i + 1) * PI / number, number / 2)
-    }
-  }
-
-  const Rx = getX(endRad, shape.R)
-  const Ry = getY(endRad, shape.R)
-
-  ctx.arc(shape.cx + ox, shape.cy + oy, shape.r, startRad, endRad)
-  ctx.lineTo(shape.cx + Rx + ox, shape.cy + Ry + oy)
-  ctx.arc(shape.cx + ox, shape.cy + oy, shape.R, endRad, startRad, true)
-  ctx.closePath()
-}
+import { getX, getY, extend, drawSector } from './util'
 
 export default class Pie {
   constructor (container = {}, options = {}) {
@@ -117,7 +73,8 @@ export default class Pie {
         isOne: false
       },
       buildPath (ctx, shape) {
-        const baseRad = shape.innerPieIndex * 2 * Math.PI / (shape.number / 2)
+        const baseRad =
+          (shape.innerPieIndex * 2 * Math.PI) / (shape.number / 2)
         drawSector(ctx, shape, 'angle', baseRad)
       }
     })
@@ -139,9 +96,7 @@ export default class Pie {
       images,
       number
     } = _this.params
-    let {
-      lastSelect
-    } = this
+    let { lastSelect } = this
     for (let i = 0; i < number; i++) {
       (function (i) {
         const innerPie = new InnerPie({
@@ -168,7 +123,9 @@ export default class Pie {
           this.setStyle('fill', '#0b3c7f')
           // 当最后一次选择的pie下标不等于当前选择pie的下标时，执行以下方法
           if (lastSelect !== i) {
-            _this.pieGroup.childOfName(`pie${lastSelect}`).setStyle('fill', '#1865ad')
+            _this.pieGroup
+              .childOfName(`pie${lastSelect}`)
+              .setStyle('fill', '#1865ad')
             if (outPies) {
               _this.outPieGroupObj[lastSelect].hide()
             }
@@ -181,13 +138,13 @@ export default class Pie {
 
         _this.pieGroup.add(innerPie)
 
-        const imgx = getX((2 * i + 1) * Math.PI / number, imgSize.radius)
-        const imgy = getY((2 * i + 1) * Math.PI / number, imgSize.radius)
+        const imgx = getX(((2 * i + 1) * Math.PI) / number, imgSize.radius)
+        const imgy = getY(((2 * i + 1) * Math.PI) / number, imgSize.radius)
 
         if (images) {
           _this.drawImage(zr, i, imgx, imgy)
         }
-      }(i))
+      })(i)
       zr.add(this.pieGroup)
     }
   }
@@ -195,18 +152,12 @@ export default class Pie {
   drawOutPie (zr, i) {
     const _this = this
     const OutPie = this.outPie
-    const {
-      centerPoint,
-      radius,
-      outPies,
-      number,
-      outTexts
-    } = _this.params
+    const { centerPoint, radius, outPies, number, outTexts } = _this.params
     const outPieGroup = new zrender.Group()
 
     for (let j = 0; j < outPies[i]; j++) {
       (function (j) {
-        const isOne = (outPies[i] === 1) // 是否只有一个外圈
+        const isOne = outPies[i] === 1 // 是否只有一个外圈
         const outPie = new OutPie({
           shape: {
             cx: centerPoint.cx,
@@ -227,14 +178,16 @@ export default class Pie {
           name: `outPie${j}`
         })
 
-        outPie.on('mouseover', function () {
-          this.setStyle('fill', '#0b3c7f')
-        }).on('mouseout', function () {
-          this.setStyle('fill', '#082956')
-        })
+        outPie
+          .on('mouseover', function () {
+            this.setStyle('fill', '#0b3c7f')
+          })
+          .on('mouseout', function () {
+            this.setStyle('fill', '#082956')
+          })
 
         outPieGroup.add(outPie)
-      }(j))
+      })(j)
     }
 
     outPieGroup.hide()
@@ -244,12 +197,7 @@ export default class Pie {
 
   drawImage (zr, i, x, y) {
     const _this = this
-    const {
-      images,
-      imgSize,
-      texts,
-      centerPoint
-    } = this.params
+    const { images, imgSize, texts, centerPoint } = this.params
     const img = new zrender.Image({
       style: {
         image: images[i],
