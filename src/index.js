@@ -4,18 +4,18 @@ import cancelImg from '@/assets/img/cancel.png'
 import analyzeImg from '@/assets/img/analyze.png'
 import routeImg from '@/assets/img/route.png'
 import operateImg from '@/assets/img/operate.png'
-// import deleteImg from '@/assets/img/delete.png'
-// import editImg from '@/assets/img/edit.png'
+import deleteImg from '@/assets/img/delete.png'
+import editImg from '@/assets/img/edit.png'
 
-function AddElement () {
+function AddElement (id) {
   const app = document.getElementById('app')
   const div = document.createElement('div')
-  div.setAttribute('id', 'main')
+  div.setAttribute('id', id)
   div.setAttribute('style', 'float: left;width:400px;height:400px;margin: 0 auto;')
   app.appendChild(div)
 }
 
-function drawPie () {
+function drawPie (el) {
   const texts = ['取消', '分析', '节点', '操作', '布局'] // 内圈pie对应的text文本
   const images = [cancelImg, analyzeImg, routeImg, operateImg]
   const outPies = [1, 1, 3, 4, 1] // 外圈outPie的个数
@@ -27,11 +27,11 @@ function drawPie () {
     ['力导力道', '矩阵', '层级']
   ] // 外圈outPie对应的text文本
   const centerPoint = {
-    cx: parseInt(document.getElementById('main').style.width) / 2,
-    cy: parseInt(document.getElementById('main').style.height) / 2
+    cx: parseInt(el.style.width) / 2,
+    cy: parseInt(el.style.height) / 2
   } // canvas中点坐标
 
-  const mainPie = new Pie(document.getElementById('main'), {
+  const mainPie = new Pie(el, {
     number: 4, // 内圈pie的数量
     texts: texts, // 内圈pie对应的text文本
     images: images, // 内圈pie对应的图片
@@ -83,24 +83,29 @@ function drawPie () {
     console.log('2-2')
   })
 }
-AddElement()
-drawPie()
+function drawPie2 (el) {
+  return new Pie(el, {
+    number: 3, // 内圈pie的数量
+    texts: ['取消', '删除关系', '修改关系'], // 内圈pie对应的text文本
+    images: [cancelImg, deleteImg, editImg], // 内圈pie对应的图片
+    imgSize: {
+      imgWidth: 20,
+      imgHeight: 20,
+      radius: 73
+    }, // 图片宽高与距离中心距离
+    centerPoint: {
+      cx: 200,
+      cy: 200
+    }, // canvas中点坐标
+    radius: {
+      innerr: 45,
+      innerR: 99
+    } // 内圈的内外半径和外圈的内外半径
+  })
+}
 
-// new Pie(document.getElementById('main1'), {
-//     number: 3, // 内圈pie的数量
-//     texts: ['取消', '删除关系', '修改关系'], // 内圈pie对应的text文本
-//     images: [cancelImg, deleteImg, editImg], // 内圈pie对应的图片
-//     imgSize: {
-//         imgWidth: 20,
-//         imgHeight: 20,
-//         radius: 73
-//     }, // 图片宽高与距离中心距离
-//     centerPoint: {
-//         cx: 200,
-//         cy: 200
-//     }, // canvas中点坐标
-//     radius: {
-//         innerr: 45,
-//         innerR: 99
-//     } // 内圈的内外半径和外圈的内外半径
-// })
+AddElement('main')
+drawPie(document.getElementById('main'))
+
+AddElement('two')
+drawPie2(document.getElementById('two'))
