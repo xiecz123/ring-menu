@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/xiecz123/RingMenu#readme",
   "dependencies": {
-    "ring-menu-canvas": "^1.0.1",
+    "ring-menu-canvas": "^1.0.3",
     "zrender": "^4.0.4"
   },
   "devDependencies": {
