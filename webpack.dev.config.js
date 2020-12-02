@@ -1,45 +1,20 @@
 const path = require('path')
+const { merge } = require('webpack-merge')
+const base = require('./webpack.base.config')
 const webpack = require('webpack')
-const {
-  CleanWebpackPlugin
-} = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-// const Manifest = require('webpack-manifest-plugin') 这个插件还不支持webpackv5
-const isDev = process.env.NODE_ENV === 'development'
 
-function resolve (dir) {
-  return path.resolve(__dirname, dir)
-}
-
-module.exports = {
+module.exports = merge(base, {
   entry: './src/index.js',
   output: {
-    filename: 'ringMenu.js', // '[name].[contenthash:8].bundle.js',
-    path: resolve('dist')
-    // library: 'ringMenu',
-    // libraryTarget: 'umd'
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash:8].bundle.js'
   },
-  mode: isDev ? 'development' : 'production',
-  target: 'web', // 这是默认的值
-  resolve: {
-    extensions: ['.js', '.json', '.css'],
-    alias: {
-      '@': resolve('src')
-    }
-  },
-  cache: {
-    type: 'filesystem' // 将缓存放在文件系统中
-  },
-  // 从输出的 bundle 中排除依赖
-  externals: {
-    zrender: 'zrender'
-  },
+  mode: 'development',
+  devtool: 'cheap-module-source-map',
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!dll', '!dll/**'] // 不删除dll目录下的文件
-    }),
     new CopyWebpackPlugin({
       patterns: [{
         from: 'public'
@@ -58,7 +33,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css'
     }),
-    // new Manifest(),
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
@@ -67,7 +41,6 @@ module.exports = {
     stats: 'errors-only',
     hot: true
   },
-  devtool: 'cheap-module-source-map',
   module: {
     rules: [
       // {
@@ -99,4 +72,4 @@ module.exports = {
       }
     ]
   }
-}
+})
