@@ -80,8 +80,7 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'postcss-loader',
-          'less-loader'
+          'postcss-loader'
         ],
         exclude: /node_modules/
       },
