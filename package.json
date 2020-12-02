@@ -1,6 +1,6 @@
 {
   "name": "ring-menu-canvas",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "main": "dist/ringmenu.js",
   "description": "使用zrender.js 封装的环形菜单组件",
   "scripts": {
