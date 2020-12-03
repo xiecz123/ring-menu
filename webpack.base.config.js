@@ -1,10 +1,5 @@
 const path = require('path')
-const {
-  CleanWebpackPlugin
-} = require('clean-webpack-plugin')
-
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
-// const isDev = process.env.NODE_ENV === 'development'
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   resolve: {
@@ -23,7 +18,6 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['**/*', '!dll', '!dll/**'] // 不删除dll目录下的文件
-    }),
-    new WebpackManifestPlugin()
+    })
   ]
 }
