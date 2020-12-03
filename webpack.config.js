@@ -6,7 +6,7 @@ const {
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-// const Manifest = require('webpack-manifest-plugin') 这个插件还不支持webpackv5
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 
 function resolve (dir) {
@@ -58,7 +58,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css'
     }),
-    // new Manifest(),
+    new WebpackManifestPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
