@@ -3,7 +3,7 @@ const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin')
 
-// const Manifest = require('webpack-manifest-plugin') 这个插件还不支持webpackv5
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 // const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['**/*', '!dll', '!dll/**'] // 不删除dll目录下的文件
-    })
-    // new Manifest(),
+    }),
+    new WebpackManifestPlugin()
   ]
 }
