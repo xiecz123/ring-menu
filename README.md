@@ -5,6 +5,7 @@
 ![demo](ringmenu.png "demo")
 
 TODO：
-1、加入 babel
-2、升级 zrender 版本
-3、第二个圆环视觉上不是很圆，排查一下原因
+
+- [ ] 加入 babel
+- [ ] 升级 zrender 版本
+- [ ] 第二个圆环视觉上不是很圆，排查一下原因
