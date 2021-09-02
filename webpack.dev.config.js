@@ -16,19 +16,21 @@ module.exports = merge(base, {
   devtool: 'cheap-module-source-map',
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{
-        from: 'public'
-        // to: 'dist',
-        // flatten: true // 它只会拷贝文件，而不会把文件夹路径都拷贝上
-        // toType: 'dir'
-      }]
+      patterns: [
+        {
+          from: 'public'
+          // to: 'dist',
+          // flatten: true // 它只会拷贝文件，而不会把文件夹路径都拷贝上
+          // toType: 'dir'
+        }
+      ]
       // from: 'public/js/*.js',
       // to: path.resolve(__dirname, 'dist', 'js'),
       // ignore: publicCopyIgnore
     }),
     new HtmlWebpackPlugin({
-      template: './public/index.html',
-      filename: 'index.html'
+      template: 'public/index.html'
+      // filename: 'index.html'
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css'
@@ -50,24 +52,22 @@ module.exports = merge(base, {
       // },
       {
         test: /\.(le|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader'
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
         exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif|jpeg|webp|svg|eot|ttf|woff|woff2)$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 10240, // 10K
-            esModule: false,
-            name: '[name]_[contenthash:8].[ext]',
-            outputPath: 'assets'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10240, // 10K
+              esModule: false,
+              name: '[name]_[contenthash:8].[ext]',
+              outputPath: 'assets'
+            }
           }
-        }],
+        ],
         exclude: /node_modules/
       }
     ]
